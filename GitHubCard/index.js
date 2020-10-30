@@ -1,3 +1,4 @@
+import axios from 'axios'
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
@@ -28,7 +29,16 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan','dustinmyers','justsml','luishrd','bigknell','crispysandwhich'];
+followersArray.forEach((person) =>{
+  axios.get(`https://api.github.com/users/${person}`)
+  .then(res =>{
+    console.log(res)
+    createCard(res)
+
+  })
+  .catch(err => console.log(err))
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +59,30 @@ const followersArray = [];
       </div>
     </div>
 */
+const card = document.querySelector('.cards')
+
+function createCard(object){
+
+    const html =  ` 
+      <div class="card">
+      <img src= ${object.data.avatar_url} />
+      <div class="card-info">
+        <h3 class="name">${object.data.name === null ? 'not availble' : object.data.name}</h3>
+        <p class="username">${object.data.login}</p>
+        <p>Location: ${object.data.location === null ? 'not availble' : object.data.location}</p>
+        <p>Profile:
+          <a href=${object.data.html_url}>${object.data.html_url}</a>
+        </p>
+        <p>Followers: ${object.data.followers}</p>
+        <p>Following: ${object.data.following}</p>
+        <p>Bio: ${object.data.bio}</p>
+      </div>
+    </div>
+   `
+    
+   card.innerHTML += html
+}
+
 
 /*
   List of LS Instructors Github username's:
